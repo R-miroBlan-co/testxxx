@@ -1,0 +1,43 @@
+name: PR
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '**'
+    paths-ignore:
+      - 'docs/**'
+jobs:
+  get-updates:
+    name: Get Updates
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Terraform for teams fetches 2 commits back. 0 Fetches all history
+      - name: Get Updates
+        id: get-updates
+        run: echo "updates=["$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | egrep '^(win20|almalinux)[^\/]*\/' | sed -n 's/\([^\/]*\/[^\/]*\)\/.*/\1/p'  | sort -u | awk '{printf "\"%s\" ",$0} END {print ""}')"]" >> $GITHUB_OUTPUT
+
+    outputs:
+      updates: ${{ steps.get-updates.outputs.updates }}
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    env:
+      #region: us-west-2
+    needs: get-updates
+    strategy:
+      matrix:
+        update: ${{ fromJson(needs.get-updates.outputs.updates) }}
+    steps:
+
+      #- uses: actions/checkout@v4
+      - run: echo ${{ matrix.update }}
+
