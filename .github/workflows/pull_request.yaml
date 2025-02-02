@@ -18,7 +18,6 @@ jobs:
       - name: Get Updates
         id: get-updates
         run: echo "updates=["$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} | egrep '^(win20|almalinux)[^\/]*\/' | sed -n 's/\([^\/]*\/[^\/]*\)\/.*/\1/p'  | sort -u | awk '{printf "\"%s\" ",$0} END {print ""}')"]" >> $GITHUB_OUTPUT
-
     outputs:
       updates: ${{ steps.get-updates.outputs.updates }}
   validate:
