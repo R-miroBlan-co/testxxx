@@ -3,10 +3,8 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - '**'
     paths-ignore:
-      - 'docs/**'
+      - 'roles/**'
 jobs:
   get-updates:
     name: Get Updates
