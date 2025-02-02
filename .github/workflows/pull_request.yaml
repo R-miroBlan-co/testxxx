@@ -34,7 +34,16 @@ jobs:
       matrix:
         update: ${{ fromJson(needs.get-updates.outputs.updates) }}
     steps:
-
-      #- uses: actions/checkout@v4
       - run: echo ${{ matrix.update }}
+      - uses: actions/checkout@v4
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: 1.12.0
+      - name: Run `packer` Validate
+        run: >
+          packer validate .
+        working-directory: ${{ matrix.update }}
+
 

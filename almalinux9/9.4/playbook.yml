@@ -1,0 +1,14 @@
+---
+- name: Install
+  hosts: all
+  user: admin
+  become: yes
+  roles:
+    #- role: dnsmasq
+    #- role: openvpn
+    #- role: squid
+    #- role: node_exporter
+    #- role: grafana-loki
+    #- role: alertmanager
+    #- role: prometheus
+    #- role: blackbox_exporter
