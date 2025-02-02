@@ -28,7 +28,7 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
-    env:
+    #env:
       #region: us-west-2
     needs: get-updates
     strategy:
